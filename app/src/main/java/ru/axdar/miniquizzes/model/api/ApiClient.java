@@ -1,4 +1,4 @@
-package ru.axdar.miniquizzes.api;
+package ru.axdar.miniquizzes.model.api;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
