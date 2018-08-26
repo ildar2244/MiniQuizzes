@@ -17,6 +17,6 @@ public class FirebaseHelper {
     }
 
     public DatabaseReference getCategories() {
-        return database.getReference(Config.DATABASE_NAME);
+        return database.getReference("");
     }
 }

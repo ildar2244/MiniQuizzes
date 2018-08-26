@@ -83,8 +83,8 @@ public class MainActivity extends AppCompatActivity implements INavigationView, 
         quizzesAdapter = new QuizzesAdapter(new ArrayList<>());
         recyclerViewQuizzes.setAdapter(quizzesAdapter);
         // presenter
-        presenterMain = new MainPresenter(this);
-        presenterMain.getQuizByCategory();
+        //presenterMain = new MainPresenter(this);
+        //presenterMain.getQuizByCategory();
     }
 
     @Override
