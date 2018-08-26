@@ -15,7 +15,6 @@ import ru.axdar.miniquizzes.model.Config;
 public class ApiClient {
 
     private static HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-    private static String authToken = "Bearer " + Config.TOKEN_FIREBASE;
 
     /**
      * Создание интерцептора для логирования запросов
@@ -27,13 +26,6 @@ public class ApiClient {
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
         }
         return new OkHttpClient.Builder()
-                .addInterceptor(chain -> {
-                    Request original = chain.request();
-                    Request.Builder requestBuilder = original.newBuilder()
-                            .header("Authorization", authToken);
-                    Request request = requestBuilder.build();
-                    return chain.proceed(request);
-                })
                 .addInterceptor(loggingInterceptor)
                 .build();
     }

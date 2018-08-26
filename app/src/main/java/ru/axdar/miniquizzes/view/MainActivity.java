@@ -1,8 +1,9 @@
 package ru.axdar.miniquizzes.view;
 
-import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -11,52 +12,49 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.ListView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GetTokenResult;
-import com.google.firebase.iid.FirebaseInstanceId;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import ru.axdar.miniquizzes.R;
-import ru.axdar.miniquizzes.model.Config;
 import ru.axdar.miniquizzes.model.dto.CategoryDTO;
 import ru.axdar.miniquizzes.presenter.NavigationPresenter;
+import ru.axdar.miniquizzes.view.adapter.CategoriesAdapter;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, INavigationView {
 
     private NavigationPresenter presenterNav;
+    private RecyclerView recyclerViewCategories;
+    private CategoriesAdapter categoriesAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        //navigationView.setNavigationItemSelectedListener(this);
+        recyclerViewCategories = findViewById(R.id.nav_list);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        recyclerViewCategories.setLayoutManager(llm);
+        categoriesAdapter = new CategoriesAdapter(new ArrayList<>());
+        recyclerViewCategories.setAdapter(categoriesAdapter);
 
         //read more my code
-        createPrivateKey();
-
         presenterNav = new NavigationPresenter(this);
-        //presenterNav.showCategories();
+        presenterNav.showCategories();
     }
 
     @Override
@@ -103,37 +101,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void showCategories(List<CategoryDTO> vo) {
         Log.d("MyTAG", "LIST_CAT: " + vo);
+        categoriesAdapter.addCategoriesToAdapter(vo);
     }
 
     @Override
     public void showError(String error) {
         Log.d("MyTAG", "ERROR: " + error);
-    }
-
-    private void createPrivateKey() {
-        AssetManager assetManager = getApplicationContext().getAssets();
-        String fileName = "mykey.json";
-
-        GoogleCredential googleCred = null;
-        try {
-            googleCred = GoogleCredential.fromStream(assetManager.open(fileName));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        GoogleCredential scoped = googleCred.createScoped(
-                Arrays.asList(
-                        "https://www.googleapis.com/auth/userinfo.email",
-                        "https://www.googleapis.com/auth/firebase.database"
-                )
-        );
-        try {
-            scoped.refreshToken();
-        } catch (IOException e) {
-            Log.e("MyTAG", "ERROR: " + e.getMessage());
-            e.printStackTrace();
-        }
-        String token = scoped.getAccessToken();
-        Log.d("MyTAG", "TOKEN: " + token);
-        Config.TOKEN_FIREBASE = token;
     }
 }

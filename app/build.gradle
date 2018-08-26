@@ -60,7 +60,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:16.0.1'
     implementation 'com.google.firebase:firebase-storage:16.0.1'
     implementation 'com.google.firebase:firebase-auth:16.0.3'
-    //implementation 'com.google.firebase:firebase-admin:6.3.0'
     //ads
     implementation 'com.google.android.gms:play-services-ads:15.0.1'
     //other
