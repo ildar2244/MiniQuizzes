@@ -12,34 +12,32 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.axdar.miniquizzes.R;
-import ru.axdar.miniquizzes.model.dto.CategoryDTO;
+import ru.axdar.miniquizzes.model.dto.QuizDTO;
 
 /**
  * Created by ildar2244 on 26.08.2018.
- * Класс-адаптер для отображения списка Категорий
  */
-public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.ViewHolder> {
+public class QuizzesAdapter extends RecyclerView.Adapter<QuizzesAdapter.ViewHolder> {
 
-    private List<CategoryDTO> list;
+    private List<QuizDTO> list;
 
-    public CategoriesAdapter(List<CategoryDTO> list) {
+    public QuizzesAdapter(List<QuizDTO> list) {
         this.list = list;
     }
 
     @NonNull
     @Override
-    public CategoriesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public QuizzesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_category, parent, false);
+                .inflate(R.layout.item_quiz, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CategoriesAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull QuizzesAdapter.ViewHolder holder, int position) {
+        String text = list.get(position).getTitle();
 
-        String title = list.get(position).getTitle();
-
-        holder.tvTitle.setText(title);
+        holder.title.setText(text);
     }
 
     @Override
@@ -48,9 +46,8 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.item_cat_title)
-        TextView tvTitle;
+        @BindView(R.id.item_quiz_title)
+        TextView title;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -58,11 +55,8 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
         }
     }
 
-    /**
-     * подгружаем список в адаптер
-     */
-    public void addCategoriesToAdapter(List<CategoryDTO> categoryDTOList) {
-        list = categoryDTOList;
+    public void addQuizToAdapter(List<QuizDTO> quizDTOList) {
+        list = quizDTOList;
         notifyDataSetChanged();
     }
 }

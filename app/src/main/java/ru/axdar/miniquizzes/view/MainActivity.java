@@ -10,7 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +19,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.axdar.miniquizzes.R;
 import ru.axdar.miniquizzes.model.dto.CategoryDTO;
+import ru.axdar.miniquizzes.model.dto.QuizDTO;
+import ru.axdar.miniquizzes.presenter.MainPresenter;
 import ru.axdar.miniquizzes.presenter.NavigationPresenter;
 import ru.axdar.miniquizzes.view.adapter.CategoriesAdapter;
+import ru.axdar.miniquizzes.view.adapter.QuizzesAdapter;
 
-public class MainActivity extends AppCompatActivity implements INavigationView {
+public class MainActivity extends AppCompatActivity implements INavigationView, IMainView {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -32,9 +35,13 @@ public class MainActivity extends AppCompatActivity implements INavigationView {
     NavigationView navigationView;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
+    @BindView(R.id.recycler_view_quizzes)
+    RecyclerView recyclerViewQuizzes;
 
     private NavigationPresenter presenterNav;
     private CategoriesAdapter categoriesAdapter;
+    private MainPresenter presenterMain;
+    private QuizzesAdapter quizzesAdapter;
 
 
     @Override
@@ -50,20 +57,41 @@ public class MainActivity extends AppCompatActivity implements INavigationView {
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        recyclerViewCategories = findViewById(R.id.nav_list);
+        // NavView init and Presenter
+        initNavView();
+        // MainContent
+        initMainView();
+    }
+
+    /**
+     * Создаются необходимые объекты для NavView и вызывается Presenter
+     */
+    private void initNavView() {
+        // UI-elements
         LinearLayoutManager llm = new LinearLayoutManager(this);
         recyclerViewCategories.setLayoutManager(llm);
         categoriesAdapter = new CategoriesAdapter(new ArrayList<>());
         recyclerViewCategories.setAdapter(categoriesAdapter);
-
+        // work with Presenter
         presenterNav = new NavigationPresenter(this);
-        presenterNav.showCategories();
+        presenterNav.getCategories();
+    }
+
+    private void initMainView() {
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        recyclerViewQuizzes.setLayoutManager(manager);
+        quizzesAdapter = new QuizzesAdapter(new ArrayList<>());
+        recyclerViewQuizzes.setAdapter(quizzesAdapter);
+        // presenter
+        presenterMain = new MainPresenter(this);
+        presenterMain.getQuizByCategory();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         presenterNav.onDestroy();
+        presenterMain.onDestroy();
     }
 
     @Override
@@ -83,5 +111,16 @@ public class MainActivity extends AppCompatActivity implements INavigationView {
     @Override
     public void showError(String error) {
         Log.d("MyTAG", "ERROR: " + error);
+        Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showQuizList(List<QuizDTO> quizVO) {
+        quizzesAdapter.addQuizToAdapter(quizVO);
+    }
+
+    @Override
+    public void showErrorMain(String errorText) {
+        Log.d("MyTAG", "ERROR: " + errorText);
     }
 }
