@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements INavigationView, 
     private CategoriesAdapter categoriesAdapter;
     private MainPresenter presenterMain;
     private QuizzesAdapter quizzesAdapter;
+    private int categoryId = 10;
 
 
     @Override
@@ -83,8 +84,8 @@ public class MainActivity extends AppCompatActivity implements INavigationView, 
         quizzesAdapter = new QuizzesAdapter(new ArrayList<>());
         recyclerViewQuizzes.setAdapter(quizzesAdapter);
         // presenter
-        //presenterMain = new MainPresenter(this);
-        //presenterMain.getQuizByCategory();
+        presenterMain = new MainPresenter(this);
+        presenterMain.getQuizByCategory(categoryId);
     }
 
     @Override
