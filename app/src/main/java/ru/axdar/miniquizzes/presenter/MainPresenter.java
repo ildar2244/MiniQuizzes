@@ -27,7 +27,6 @@ public class MainPresenter implements IPresenter{
     }
 
     public void getQuizByCategory(int catID) {
-        Log.d("MyTAG", "PR_MAIN-1");
         disposable = model
                 .getQuizByCategory()
                 .flatMap(Flowable::fromIterable)

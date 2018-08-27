@@ -12,4 +12,6 @@ public interface INavigationView extends View {
     //TODO: заменить на VO
     void showCategories(List<CategoryDTO> vo);
 
+    void onItemClick();
+
 }

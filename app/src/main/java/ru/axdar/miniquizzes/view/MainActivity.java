@@ -6,6 +6,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements INavigationView, 
     private CategoriesAdapter categoriesAdapter;
     private MainPresenter presenterMain;
     private QuizzesAdapter quizzesAdapter;
-    private int categoryId = 10;
+    private int categoryId = 10; // id выбираемой категории
 
 
     @Override
@@ -58,7 +59,9 @@ public class MainActivity extends AppCompatActivity implements INavigationView, 
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        // NavView init and Presenter
+        presenterNav = new NavigationPresenter(this);
+        presenterMain = new MainPresenter(this);
+        // NavView init
         initNavView();
         // MainContent
         initMainView();
@@ -71,20 +74,27 @@ public class MainActivity extends AppCompatActivity implements INavigationView, 
         // UI-elements
         LinearLayoutManager llm = new LinearLayoutManager(this);
         recyclerViewCategories.setLayoutManager(llm);
-        categoriesAdapter = new CategoriesAdapter(new ArrayList<>());
+        categoriesAdapter = new CategoriesAdapter(new ArrayList<>(), presenterMain, this);
         recyclerViewCategories.setAdapter(categoriesAdapter);
-        // work with Presenter
-        presenterNav = new NavigationPresenter(this);
+        recyclerViewCategories.addItemDecoration(
+                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+        );
+        // work with NavPresenter
         presenterNav.getCategories();
     }
 
+    /**
+     * UI-элементы основной части активити
+     */
     private void initMainView() {
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recyclerViewQuizzes.setLayoutManager(manager);
         quizzesAdapter = new QuizzesAdapter(new ArrayList<>());
         recyclerViewQuizzes.setAdapter(quizzesAdapter);
-        // presenter
-        presenterMain = new MainPresenter(this);
+        recyclerViewQuizzes.addItemDecoration(
+                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+        );
+        // work with MainPresenter
         presenterMain.getQuizByCategory(categoryId);
     }
 
@@ -107,6 +117,11 @@ public class MainActivity extends AppCompatActivity implements INavigationView, 
     @Override
     public void showCategories(List<CategoryDTO> vo) {
         categoriesAdapter.addCategoriesToAdapter(vo);
+    }
+
+    @Override
+    public void onItemClick() {
+        drawerLayout.closeDrawer(GravityCompat.START);
     }
 
     @Override
