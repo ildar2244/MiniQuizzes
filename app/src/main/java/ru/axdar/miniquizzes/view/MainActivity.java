@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements INavigationView, 
     private void initMainView() {
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recyclerViewQuizzes.setLayoutManager(manager);
-        quizzesAdapter = new QuizzesAdapter(new ArrayList<>());
+        quizzesAdapter = new QuizzesAdapter(this, new ArrayList<>());
         recyclerViewQuizzes.setAdapter(quizzesAdapter);
         recyclerViewQuizzes.addItemDecoration(
                 new DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
