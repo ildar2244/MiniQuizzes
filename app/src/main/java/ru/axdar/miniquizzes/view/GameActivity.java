@@ -8,9 +8,14 @@ import android.widget.TextView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ru.axdar.miniquizzes.Common;
 import ru.axdar.miniquizzes.R;
+import ru.axdar.miniquizzes.model.dto.QuestionDTO;
+import ru.axdar.miniquizzes.model.dto.QuizDTO;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -20,6 +25,9 @@ public class GameActivity extends AppCompatActivity {
     TextView tvQuizQuestion;
     @BindView(R.id.layout_quiz_buttons)
     LinearLayout layoutQuizButtons;
+
+    private QuizDTO quizDTO;
+    private List<QuestionDTO> questionDTOList;
 
 
     @Override
@@ -31,6 +39,12 @@ public class GameActivity extends AppCompatActivity {
         AdRequest adRequest = new AdRequest.Builder()
                 .setRequestAgent("android_studio:ad_template").build();
         adView.loadAd(adRequest);
+
+        quizDTO = getIntent().getParcelableExtra(Common.PARCELABLE_QUIZ);
+        questionDTOList = quizDTO.getQuestionsDto();
+        String text = questionDTOList.get(0).getQuestion();
+
+        tvQuizQuestion.setText(text);
 
     }
 

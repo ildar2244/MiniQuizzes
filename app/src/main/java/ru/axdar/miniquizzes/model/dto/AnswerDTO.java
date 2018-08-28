@@ -3,11 +3,13 @@ package ru.axdar.miniquizzes.model.dto;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by ildar2244 on 21.08.2018.
  * Ответы на вопросы
  */
-public class AnswerDTO {
+public class AnswerDTO implements Serializable {
     //текст ответа
     @SerializedName("text")
     @Expose

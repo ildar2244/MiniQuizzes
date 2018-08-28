@@ -13,6 +13,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ru.axdar.miniquizzes.Common;
 import ru.axdar.miniquizzes.R;
 import ru.axdar.miniquizzes.model.dto.QuizDTO;
 import ru.axdar.miniquizzes.view.GameActivity;
@@ -44,7 +45,9 @@ public class QuizzesAdapter extends RecyclerView.Adapter<QuizzesAdapter.ViewHold
         String text = list.get(position).getTitle();
         holder.title.setText(text);
         holder.setItemClickListener((view, position1, isLongClick) -> {
-            context.startActivity(new Intent(context, GameActivity.class));
+            Intent intent = new Intent(context, GameActivity.class);
+            intent.putExtra(Common.PARCELABLE_QUIZ, list.get(position1));
+            context.startActivity(intent);
         });
     }
 
