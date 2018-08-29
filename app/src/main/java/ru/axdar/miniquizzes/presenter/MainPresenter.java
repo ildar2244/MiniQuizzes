@@ -27,6 +27,7 @@ public class MainPresenter implements IPresenter{
     }
 
     public void getQuizByCategory(int catID) {
+        mainView.showProgressBar();
         disposable = model
                 .getQuizByCategory()
                 .flatMap(Flowable::fromIterable)

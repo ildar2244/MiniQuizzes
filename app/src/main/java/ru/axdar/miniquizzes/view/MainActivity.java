@@ -11,6 +11,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -38,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements INavigationView, 
     DrawerLayout drawerLayout;
     @BindView(R.id.recycler_view_quizzes)
     RecyclerView recyclerViewQuizzes;
+    @BindView(R.id.pb_quizzes)
+    ProgressBar progressBar;
 
     private NavigationPresenter presenterNav;
     private CategoriesAdapter categoriesAdapter;
@@ -132,11 +136,22 @@ public class MainActivity extends AppCompatActivity implements INavigationView, 
 
     @Override
     public void showQuizList(List<QuizDTO> quizVO) {
+        progressBar.setVisibility(View.GONE);
         quizzesAdapter.addQuizToAdapter(quizVO);
     }
 
     @Override
     public void showErrorMain(String errorText) {
         Log.d("MyTAG", "ERROR: " + errorText);
+    }
+
+    @Override
+    public void showProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgressBar() {
+        progressBar.setVisibility(View.GONE);
     }
 }

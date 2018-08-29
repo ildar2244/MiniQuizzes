@@ -14,5 +14,8 @@ public interface IMainView {
 
     void showErrorMain(String errorText);
 
+    void showProgressBar();
+    void hideProgressBar();
+
 
 }
