@@ -2,6 +2,7 @@ package ru.axdar.miniquizzes.view;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,12 +32,16 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     TextView tvQuizQuestion;
     @BindView(R.id.layout_quiz_buttons)
     LinearLayout layoutQuizButtons;
+    @BindView(R.id.tv_count_question)
+    TextView tvCount;
+    @BindView(R.id.toolbar_game)
+    Toolbar toolbar;
 
     private QuizDTO quizDTO;
     private List<QuestionDTO> questionDTOList;
 
     private int correctAnswer; //сюда пишем ID-кнопки правильного ответа
-
+    private int countQuestions; //кол-во пройденных вопросов
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,16 +53,26 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 .setRequestAgent("android_studio:ad_template").build();
         adView.loadAd(adRequest);
 
+        initToolbar();
+
         quizDTO = getIntent().getParcelableExtra(Common.PARCELABLE_QUIZ);
         questionDTOList = quizDTO.getQuestionsDto();
 
         //for example
         String text = questionDTOList.get(0).getQuestion();
         tvQuizQuestion.setText(text);
+        tvCount.setText(String.format("%1$s/%2$s", countQuestions, questionDTOList.size()));
 
         //передаём список ответов, чтобы создать кнопки с ответами
         createAnswerButtons(questionDTOList.get(0).getAnswersDto());
 
+    }
+
+    private void initToolbar() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(v -> finish());
     }
 
     /**
