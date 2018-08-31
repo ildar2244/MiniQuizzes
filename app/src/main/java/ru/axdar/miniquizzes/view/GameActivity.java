@@ -9,9 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,9 +25,11 @@ import ru.axdar.miniquizzes.R;
 import ru.axdar.miniquizzes.model.dto.AnswerDTO;
 import ru.axdar.miniquizzes.model.dto.QuestionDTO;
 import ru.axdar.miniquizzes.model.dto.QuizDTO;
+import ru.axdar.miniquizzes.presenter.GamePresenter;
 import ru.axdar.miniquizzes.view.adapter.SliderAdapter;
 
-public class GameActivity extends AppCompatActivity implements View.OnClickListener {
+public class GameActivity extends AppCompatActivity
+        implements View.OnClickListener, IGameView {
 
     @BindView(R.id.adView)
     AdView adView;
@@ -43,6 +43,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     TabLayout tabLayout;
     @BindView(R.id.view_pager)
     ViewPager viewPager;
+
+    private GamePresenter presenterGame;
 
     private QuizDTO quizDTO;
     private List<QuestionDTO> questionDTOList;
@@ -59,14 +61,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
         AdRequest adRequest = new AdRequest.Builder()
                 .setRequestAgent("android_studio:ad_template").build();
-        adView.loadAd(adRequest);
+        //adView.loadAd(adRequest);
+
         //сначала получаем данные
         quizDTO = getIntent().getParcelableExtra(Common.PARCELABLE_QUIZ);
         questionDTOList = quizDTO.getQuestionsDto();
         //затем работаем с тулбар
         initToolbar();
-
-        //for example
+        presenterGame = new GamePresenter(this);
         //передаём список ответов, чтобы создать кнопки с ответами
         createAnswerButtons(questionDTOList.get(0).getAnswersDto());
         checkImageQuestion(true);
@@ -131,9 +133,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             tabCount = 1; //вкладка только под текст
         }
-        viewPager.setAdapter(
-                new SliderAdapter(this, tabCount, questionDTOList.get(currentQuestion))
-        );
+        SliderAdapter sliderAdapter = new SliderAdapter(this, tabCount,
+                questionDTOList.get(currentQuestion), presenterGame);
+        viewPager.setAdapter(sliderAdapter);
         tabLayout.setupWithViewPager(viewPager, true);
+    }
+
+    @Override
+    public void errorLoadImage(String message) {
+        Toast.makeText(this, R.string.toast_error_load_image, Toast.LENGTH_SHORT).show();
     }
 }

@@ -7,6 +7,7 @@
         android:id="@+id/tab_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="8dp"
         app:tabMode="fixed"
         app:tabIndicatorHeight="1dp"
         app:tabIndicatorColor="@color/colorPrimary"/>
@@ -15,7 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tab_view"
-        android:layout_above="@id/layout_quiz_buttons"/>
+        android:layout_above="@id/layout_quiz_buttons"
+        android:layout_margin="8dp"/>
     <LinearLayout
         android:id="@+id/layout_quiz_buttons"
         android:layout_width="match_parent"

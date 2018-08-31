@@ -2,6 +2,8 @@ package ru.axdar.miniquizzes.model.firebase;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import ru.axdar.miniquizzes.model.Config;
 
@@ -10,13 +12,11 @@ import ru.axdar.miniquizzes.model.Config;
  */
 public class FirebaseHelper {
 
-    private FirebaseDatabase database;
-
-    public FirebaseHelper() {
-        database = FirebaseDatabase.getInstance();
+    private static FirebaseStorage instanceStorage() {
+        return FirebaseStorage.getInstance();
     }
 
-    public DatabaseReference getCategories() {
-        return database.getReference("");
+    public static StorageReference getReferenceStorage() {
+        return instanceStorage().getReferenceFromUrl(Config.STORAGE_URL);
     }
 }

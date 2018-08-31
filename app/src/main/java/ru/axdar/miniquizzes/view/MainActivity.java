@@ -143,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements INavigationView, 
     @Override
     public void showErrorMain(String errorText) {
         Log.d("MyTAG", "ERROR: " + errorText);
+        Toast.makeText(this, errorText, Toast.LENGTH_SHORT).show();
     }
 
     @Override
