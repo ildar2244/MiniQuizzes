@@ -16,8 +16,8 @@ public class QuestionDTO implements Serializable {
     private String id;
     @SerializedName("question")
     @Expose
-    //наличие картинки в вопросе
     private String question;
+    //наличие картинки в вопросе
     @SerializedName("imgCheck")
     @Expose
     private Boolean imgCheck;

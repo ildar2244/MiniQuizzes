@@ -45,6 +45,7 @@ public class MainPresenter implements IPresenter{
 
     private void handleError(Throwable error) {
         //Log.d("MyTAG", "PR_MAIN-error: " + error.getCause());
+        //TODO: Error timeout обработать
         mainView.showErrorMain(error.getLocalizedMessage());
     }
 

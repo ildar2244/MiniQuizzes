@@ -1,13 +1,17 @@
 package ru.axdar.miniquizzes.view;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,25 +27,29 @@ import ru.axdar.miniquizzes.R;
 import ru.axdar.miniquizzes.model.dto.AnswerDTO;
 import ru.axdar.miniquizzes.model.dto.QuestionDTO;
 import ru.axdar.miniquizzes.model.dto.QuizDTO;
+import ru.axdar.miniquizzes.view.adapter.SliderAdapter;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener {
 
     @BindView(R.id.adView)
     AdView adView;
-    @BindView(R.id.tv_quiz_question)
-    TextView tvQuizQuestion;
     @BindView(R.id.layout_quiz_buttons)
     LinearLayout layoutQuizButtons;
     @BindView(R.id.tv_count_question)
     TextView tvCount;
     @BindView(R.id.toolbar_game)
     Toolbar toolbar;
+    @BindView(R.id.tab_view)
+    TabLayout tabLayout;
+    @BindView(R.id.view_pager)
+    ViewPager viewPager;
 
     private QuizDTO quizDTO;
     private List<QuestionDTO> questionDTOList;
 
     private int correctAnswer; //сюда пишем ID-кнопки правильного ответа
     private int countQuestions; //кол-во пройденных вопросов
+    private int currentQuestion = 0; //id текущего вопроса
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,27 +60,29 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         AdRequest adRequest = new AdRequest.Builder()
                 .setRequestAgent("android_studio:ad_template").build();
         adView.loadAd(adRequest);
-
-        initToolbar();
-
+        //сначала получаем данные
         quizDTO = getIntent().getParcelableExtra(Common.PARCELABLE_QUIZ);
         questionDTOList = quizDTO.getQuestionsDto();
+        //затем работаем с тулбар
+        initToolbar();
 
         //for example
-        String text = questionDTOList.get(0).getQuestion();
-        tvQuizQuestion.setText(text);
-        tvCount.setText(String.format("%1$s/%2$s", countQuestions, questionDTOList.size()));
-
         //передаём список ответов, чтобы создать кнопки с ответами
         createAnswerButtons(questionDTOList.get(0).getAnswersDto());
+        checkImageQuestion(true);
 
     }
 
+    /**
+     * наполняем тулбар смыслом
+     */
     private void initToolbar() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(v -> finish());
+        //кол-во пройденных вопросов
+        tvCount.setText(String.format("%1$s/%2$s", countQuestions, questionDTOList.size()));
     }
 
     /**
@@ -109,5 +119,21 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             message = "FALSE";
         }
         Toast.makeText(this, "answer: " + message, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Реализация под вопрос с картинкой и без
+     */
+    private void checkImageQuestion(boolean check) {
+        int tabCount; //кол-во вкладок
+        if (check) {
+            tabCount = 2; //вкладки под текст и картинку
+        } else {
+            tabCount = 1; //вкладка только под текст
+        }
+        viewPager.setAdapter(
+                new SliderAdapter(this, tabCount, questionDTOList.get(currentQuestion))
+        );
+        tabLayout.setupWithViewPager(viewPager, true);
     }
 }
