@@ -50,8 +50,8 @@ public class GameActivity extends AppCompatActivity
     private List<QuestionDTO> questionDTOList;
 
     private int correctAnswer; //сюда пишем ID-кнопки правильного ответа
-    private int countQuestions; //кол-во пройденных вопросов
-    private int currentQuestion = 0; //id текущего вопроса
+    private int indexQuestion = 0, totalQuestion; //текущий вопрос и всего вопросов
+    private boolean isSelected = true; // выбран ли уже ответ (нажатие кнопки)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,10 +69,33 @@ public class GameActivity extends AppCompatActivity
         //затем работаем с тулбар
         initToolbar();
         presenterGame = new GamePresenter(this);
-        //передаём список ответов, чтобы создать кнопки с ответами
-        createAnswerButtons(questionDTOList.get(0).getAnswersDto());
-        checkImageQuestion(true);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        totalQuestion = questionDTOList.size();
+        showQuestion(indexQuestion);
+        if (adView != null) {
+            adView.resume();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        if (adView != null) {
+            adView.pause();
+        }
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (adView != null) {
+            adView.destroy();
+        }
+        super.onDestroy();
     }
 
     /**
@@ -83,8 +106,6 @@ public class GameActivity extends AppCompatActivity
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(v -> finish());
-        //кол-во пройденных вопросов
-        tvCount.setText(String.format("%1$s/%2$s", countQuestions, questionDTOList.size()));
     }
 
     /**
@@ -112,29 +133,33 @@ public class GameActivity extends AppCompatActivity
 
     @Override
     public void onClick(View view) {
-        Button clickedButton = (Button)view;
-        Log.d("tag-but", "click-id: " + clickedButton.getId());
-        String message = "";
-        if (clickedButton.getId() == correctAnswer) {
-            message = "TRUE";
-        } else {
-            message = "FALSE";
+        if (isSelected) {
+            isSelected = false; // блокируем повторные клики
+            Button clickedButton = (Button)view;
+            String message = "";
+            if (clickedButton.getId() == correctAnswer) {
+                message = "TRUE";
+                showQuestion(++indexQuestion);
+            } else {
+                message = "FALSE";
+                showQuestion(++indexQuestion); //потом заменить на Pop-Up
+            }
+            Toast.makeText(this, "answer: " + message, Toast.LENGTH_SHORT).show();
         }
-        Toast.makeText(this, "answer: " + message, Toast.LENGTH_SHORT).show();
     }
 
     /**
      * Реализация под вопрос с картинкой и без
      */
-    private void checkImageQuestion(boolean check) {
+    private void checkImageQuestion(QuestionDTO questionDTO) {
         int tabCount; //кол-во вкладок
-        if (check) {
+        if (questionDTO.getImgCheck()) {
             tabCount = 2; //вкладки под текст и картинку
         } else {
             tabCount = 1; //вкладка только под текст
         }
-        SliderAdapter sliderAdapter = new SliderAdapter(this, tabCount,
-                questionDTOList.get(currentQuestion), presenterGame);
+        SliderAdapter sliderAdapter =
+                new SliderAdapter(this, tabCount, questionDTO, presenterGame);
         viewPager.setAdapter(sliderAdapter);
         tabLayout.setupWithViewPager(viewPager, true);
     }
@@ -142,5 +167,26 @@ public class GameActivity extends AppCompatActivity
     @Override
     public void errorLoadImage(String message) {
         Toast.makeText(this, R.string.toast_error_load_image, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * переход на следующий вопрос
+     */
+    private void showQuestion(int current) {
+        // есть ли ещё вопросы в списке
+        if (current < totalQuestion) {
+            layoutQuizButtons.removeAllViews(); // очищаем от прежних Button-ответов
+            QuestionDTO questionDTO = questionDTOList.get(current);
+            //кол-во пройденных вопросов
+            String playProgress = String.format("%1$s/%2$s", (current+1), totalQuestion);
+            tvCount.setText(playProgress);
+            // проверка наличия картинки в вопросе
+            checkImageQuestion(questionDTO);
+            //передаём список ответов, чтобы создать кнопки с ответами
+            createAnswerButtons(questionDTO.getAnswersDto());
+            isSelected = true; // можно кликать кнопки ответов
+        } else {
+            finish();
+        }
     }
 }
