@@ -1,10 +1,14 @@
 package ru.axdar.miniquizzes.view;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +52,7 @@ public class GameActivity extends AppCompatActivity
 
     private QuizDTO quizDTO;
     private List<QuestionDTO> questionDTOList;
+    private QuestionDTO questionDTO;
 
     private int correctAnswer; //сюда пишем ID-кнопки правильного ответа
     private int indexQuestion = 0, totalQuestion; //текущий вопрос и всего вопросов
@@ -61,7 +66,7 @@ public class GameActivity extends AppCompatActivity
 
         AdRequest adRequest = new AdRequest.Builder()
                 .setRequestAgent("android_studio:ad_template").build();
-        //adView.loadAd(adRequest);
+        adView.loadAd(adRequest);
 
         //сначала получаем данные
         quizDTO = getIntent().getParcelableExtra(Common.PARCELABLE_QUIZ);
@@ -136,15 +141,12 @@ public class GameActivity extends AppCompatActivity
         if (isSelected) {
             isSelected = false; // блокируем повторные клики
             Button clickedButton = (Button)view;
-            String message = "";
             if (clickedButton.getId() == correctAnswer) {
-                message = "TRUE";
-                showQuestion(++indexQuestion);
+                alertTrueFalse();
             } else {
-                message = "FALSE";
-                showQuestion(++indexQuestion); //потом заменить на Pop-Up
+                Toast.makeText(this, R.string.toast_game_again_click, Toast.LENGTH_SHORT).show();
+                isSelected = true;
             }
-            Toast.makeText(this, "answer: " + message, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -176,7 +178,7 @@ public class GameActivity extends AppCompatActivity
         // есть ли ещё вопросы в списке
         if (current < totalQuestion) {
             layoutQuizButtons.removeAllViews(); // очищаем от прежних Button-ответов
-            QuestionDTO questionDTO = questionDTOList.get(current);
+            questionDTO = questionDTOList.get(current);
             //кол-во пройденных вопросов
             String playProgress = String.format("%1$s/%2$s", (current+1), totalQuestion);
             tvCount.setText(playProgress);
@@ -186,7 +188,37 @@ public class GameActivity extends AppCompatActivity
             createAnswerButtons(questionDTO.getAnswersDto());
             isSelected = true; // можно кликать кнопки ответов
         } else {
-            finish();
+            alertFinishGame();
         }
+    }
+
+    /**
+     * Диалоговое окно с правильным ответом и кнопкой дальше: след.вопрос или финиш.
+     */
+    private void alertTrueFalse() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        Spanned trueAnswer = Html.fromHtml(questionDTO.getAnswerTrue());
+        builder.setTitle(R.string.alert_game_answer_true)
+                .setMessage(trueAnswer)
+                .setPositiveButton(R.string.alert_game_button_next, (dialog, which) -> {
+                    showQuestion(++indexQuestion);
+                    dialog.cancel();
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    /**
+     * Диалоговое окно при завершении игры.
+     */
+    private void alertFinishGame() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.alert_game_finish)
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                    finish();
+                    dialog.cancel();
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }
