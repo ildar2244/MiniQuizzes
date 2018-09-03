@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -122,12 +123,22 @@ public class GameActivity extends AppCompatActivity
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
             );
+            params.setMargins(32, 4, 32, 4);
             Button button = new Button(this);
             button.setId(i); //устанавливаем id, чтобы потом узнать верный ответ
             button.setText(answers.get(i).getText());
+            //button.setTextColor(getResources().getColor(R.color.colorPrimary));
+            /*TypedValue typedValue = new TypedValue();
+            this.getTheme().resolveAttribute(android.R.attr.selectableItemBackground, typedValue, true);
+            if (typedValue.resourceId != 0) {
+                button.setBackgroundResource(typedValue.resourceId);
+            } else {
+                button.setBackgroundColor(typedValue.data);
+            }*/
+            button.setBackgroundResource(R.drawable.btn_answer_default);
             button.setOnClickListener(this::onClick);
 
-            //фиксируем правильный ответ
+            //запоминаем правильный ответ
             if (answers.get(i).getCheck())
                 correctAnswer = button.getId();
 
