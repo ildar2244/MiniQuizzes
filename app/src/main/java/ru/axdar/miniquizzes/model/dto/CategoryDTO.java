@@ -14,6 +14,9 @@ public class CategoryDTO {
     @SerializedName("title")
     @Expose
     private String title;
+    @SerializedName("titleRu")
+    @Expose
+    private String titleRu;
 
     public Integer getId() {
         return id;
@@ -29,5 +32,13 @@ public class CategoryDTO {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getTitleRu() {
+        return titleRu;
+    }
+
+    public void setTitleRu(String titleRu) {
+        this.titleRu = titleRu;
     }
 }

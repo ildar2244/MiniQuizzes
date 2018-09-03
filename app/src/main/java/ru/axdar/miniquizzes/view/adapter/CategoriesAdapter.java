@@ -46,13 +46,12 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull CategoriesAdapter.ViewHolder holder, int position) {
 
-        String title = list.get(position).getTitle();
+        String title = list.get(position).getTitleRu();
 
         holder.tvTitle.setText(title);
 
         holder.tvTitle.setOnClickListener(v -> {
             int catID = list.get(position).getId();
-            Log.d("MyTAG", "ADAPTER_CAT-click: " + catID);
             mainPresenter.getQuizByCategory(catID);
             navigationView.onItemClick();
         });
