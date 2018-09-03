@@ -7,7 +7,7 @@
         android:id="@+id/item_cat_title"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textColor="@android:color/white"
+        android:textColor="@color/colorPrimary"
         android:textSize="18sp"
         android:gravity="center_vertical"/>
 </RelativeLayout>
