@@ -31,6 +31,10 @@ android {
     }
 }
 
+realm {
+    syncEnabled = true;
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     //for testing

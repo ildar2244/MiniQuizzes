@@ -1,6 +1,5 @@
 package ru.axdar.miniquizzes.view;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -9,8 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.Spanned;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -27,9 +24,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.axdar.miniquizzes.Common;
 import ru.axdar.miniquizzes.R;
-import ru.axdar.miniquizzes.model.dto.AnswerDTO;
-import ru.axdar.miniquizzes.model.dto.QuestionDTO;
-import ru.axdar.miniquizzes.model.dto.QuizDTO;
+import ru.axdar.miniquizzes.data.dto.AnswerDTO;
+import ru.axdar.miniquizzes.data.dto.QuestionDTO;
+import ru.axdar.miniquizzes.data.dto.QuizDTO;
 import ru.axdar.miniquizzes.presenter.GamePresenter;
 import ru.axdar.miniquizzes.view.adapter.SliderAdapter;
 

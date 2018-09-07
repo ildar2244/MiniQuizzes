@@ -2,7 +2,7 @@ package ru.axdar.miniquizzes.view;
 
 import java.util.List;
 
-import ru.axdar.miniquizzes.model.dto.QuizDTO;
+import ru.axdar.miniquizzes.data.dto.QuizDTO;
 
 /**
  * Created by ildar2244 on 26.08.2018.

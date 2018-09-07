@@ -15,7 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.axdar.miniquizzes.Common;
 import ru.axdar.miniquizzes.R;
-import ru.axdar.miniquizzes.model.dto.QuizDTO;
+import ru.axdar.miniquizzes.data.dto.QuizDTO;
 import ru.axdar.miniquizzes.view.GameActivity;
 
 /**

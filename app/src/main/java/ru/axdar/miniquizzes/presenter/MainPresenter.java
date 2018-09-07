@@ -1,15 +1,13 @@
 package ru.axdar.miniquizzes.presenter;
 
-import android.util.Log;
-
 import java.util.List;
 
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import ru.axdar.miniquizzes.model.Model;
-import ru.axdar.miniquizzes.model.dto.QuizDTO;
+import ru.axdar.miniquizzes.data.repository.remote.RemoteDataSource;
+import ru.axdar.miniquizzes.data.dto.QuizDTO;
 import ru.axdar.miniquizzes.view.IMainView;
 
 /**
@@ -18,17 +16,17 @@ import ru.axdar.miniquizzes.view.IMainView;
 public class MainPresenter implements IPresenter{
 
     private IMainView mainView;
-    private Model model;
+    private RemoteDataSource remoteDataSource;
     private Disposable disposable;
 
     public MainPresenter(IMainView mainView) {
         this.mainView = mainView;
-        this.model = new Model();
+        this.remoteDataSource = new RemoteDataSource();
     }
 
     public void getQuizByCategory(int catID) {
         mainView.showProgressBar();
-        disposable = model
+        disposable = remoteDataSource
                 .getQuizByCategory()
                 .flatMap(Flowable::fromIterable)
                 .filter(quizDTO -> quizDTO.getCategoryId() == catID)

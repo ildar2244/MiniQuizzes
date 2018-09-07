@@ -1,4 +1,4 @@
-package ru.axdar.miniquizzes.model.dto;
+package ru.axdar.miniquizzes.data.dto;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

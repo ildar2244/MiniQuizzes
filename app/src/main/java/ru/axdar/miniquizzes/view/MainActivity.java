@@ -21,8 +21,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.axdar.miniquizzes.R;
-import ru.axdar.miniquizzes.model.dto.CategoryDTO;
-import ru.axdar.miniquizzes.model.dto.QuizDTO;
+import ru.axdar.miniquizzes.data.dbo.CategoryDBO;
+import ru.axdar.miniquizzes.data.dto.CategoryDTO;
+import ru.axdar.miniquizzes.data.dto.QuizDTO;
 import ru.axdar.miniquizzes.presenter.MainPresenter;
 import ru.axdar.miniquizzes.presenter.NavigationPresenter;
 import ru.axdar.miniquizzes.view.adapter.CategoriesAdapter;
@@ -84,7 +85,9 @@ public class MainActivity extends AppCompatActivity implements INavigationView, 
                 new DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         );
         // work with NavPresenter
-        presenterNav.getCategories();
+        //presenterNav.getCategories();
+        // from Realm
+        presenterNav.getCategoriesFromLocal();
     }
 
     /**
@@ -99,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements INavigationView, 
                 new DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         );*/
         // work with MainPresenter
-        presenterMain.getQuizByCategory(categoryId);
+        //presenterMain.getQuizByCategory(categoryId);
     }
 
     @Override
@@ -119,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements INavigationView, 
     }
 
     @Override
-    public void showCategories(List<CategoryDTO> vo) {
+    public void showCategories(List<CategoryDBO> vo) {
         categoriesAdapter.addCategoriesToAdapter(vo);
     }
 

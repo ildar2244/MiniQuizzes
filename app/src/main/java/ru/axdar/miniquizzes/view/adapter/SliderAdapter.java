@@ -1,27 +1,22 @@
 package ru.axdar.miniquizzes.view.adapter;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.squareup.picasso.Picasso;
 
 import ru.axdar.miniquizzes.R;
-import ru.axdar.miniquizzes.model.Config;
-import ru.axdar.miniquizzes.model.dto.QuestionDTO;
-import ru.axdar.miniquizzes.model.firebase.FirebaseHelper;
+import ru.axdar.miniquizzes.data.Config;
+import ru.axdar.miniquizzes.data.dto.QuestionDTO;
+import ru.axdar.miniquizzes.data.firebase.FirebaseHelper;
 import ru.axdar.miniquizzes.presenter.GamePresenter;
 
 /**

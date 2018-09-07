@@ -1,4 +1,4 @@
-package ru.axdar.miniquizzes.model.dto;
+package ru.axdar.miniquizzes.data.dto;
 
 import android.os.Parcel;
 import android.os.Parcelable;

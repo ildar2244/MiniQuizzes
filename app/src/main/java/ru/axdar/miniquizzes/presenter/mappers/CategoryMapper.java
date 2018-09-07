@@ -2,9 +2,8 @@ package ru.axdar.miniquizzes.presenter.mappers;
 
 import java.util.List;
 
-import io.reactivex.Observable;
 import io.reactivex.functions.Function;
-import ru.axdar.miniquizzes.model.dto.CategoryDTO;
+import ru.axdar.miniquizzes.data.dto.CategoryDTO;
 import ru.axdar.miniquizzes.presenter.vo.CategoryVO;
 
 /**

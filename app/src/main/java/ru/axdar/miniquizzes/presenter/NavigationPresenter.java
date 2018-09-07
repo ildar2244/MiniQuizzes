@@ -7,8 +7,10 @@ import java.util.List;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import ru.axdar.miniquizzes.model.Model;
-import ru.axdar.miniquizzes.model.dto.CategoryDTO;
+import ru.axdar.miniquizzes.data.dbo.CategoryDBO;
+import ru.axdar.miniquizzes.data.repository.DataRepository;
+import ru.axdar.miniquizzes.data.repository.remote.RemoteDataSource;
+import ru.axdar.miniquizzes.data.dto.CategoryDTO;
 import ru.axdar.miniquizzes.view.INavigationView;
 
 /**
@@ -17,29 +19,33 @@ import ru.axdar.miniquizzes.view.INavigationView;
 public class NavigationPresenter implements IPresenter {
 
     private INavigationView navigationView;
-    private Model model;
-    private Disposable disposable;
+    private RemoteDataSource remoteDataSource;
+    private Disposable disposable, disLocal;
+
+    //parts with Realm
+    private DataRepository dataRepository;
 
     public NavigationPresenter(INavigationView navigationView) {
         this.navigationView = navigationView;
-        this.model = new Model();
+        this.remoteDataSource = new RemoteDataSource();
+        this.dataRepository = new DataRepository();
     }
 
     /**
      * запрос списка категорий
      */
     public void getCategories() {
-        disposable = model
-                .getCategories()
+        /*disposable = remoteDataSource
+                .getCategoriesFromRemote()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::responseCategories, this::handleError);
+                .subscribe(this::responseCategories, this::handleError);*/
     }
 
     /**
      * обработка результата запроса списка категорий: отправляю во вьюху
      */
-    private void responseCategories(List<CategoryDTO> list) {
+    private void responseCategories(List<CategoryDBO> list) {
         navigationView.showCategories(list);
     }
 
@@ -54,5 +60,19 @@ public class NavigationPresenter implements IPresenter {
     @Override
     public void onDestroy() {
         disposable.dispose();
+        if (disLocal.isDisposed()) {
+            disLocal.dispose();
+        }
+    }
+
+    public void getCategoriesFromLocal() {
+        disLocal = dataRepository.loadCategories()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::responseCategories, this::handleError);
+    }
+
+    private void responseLocal(List<CategoryDBO> list) {
+        Log.d("MyTAG", "LOCAL: " + list);
     }
 }

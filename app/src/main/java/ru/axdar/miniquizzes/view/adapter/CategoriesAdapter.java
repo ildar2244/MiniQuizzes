@@ -2,7 +2,6 @@ package ru.axdar.miniquizzes.view.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +12,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.axdar.miniquizzes.R;
-import ru.axdar.miniquizzes.model.dto.CategoryDTO;
+import ru.axdar.miniquizzes.data.dbo.CategoryDBO;
+import ru.axdar.miniquizzes.data.dto.CategoryDTO;
 import ru.axdar.miniquizzes.presenter.MainPresenter;
-import ru.axdar.miniquizzes.presenter.NavigationPresenter;
 import ru.axdar.miniquizzes.view.INavigationView;
 
 /**
@@ -24,11 +23,11 @@ import ru.axdar.miniquizzes.view.INavigationView;
  */
 public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.ViewHolder> {
 
-    private List<CategoryDTO> list;
     private MainPresenter mainPresenter;
     private INavigationView navigationView;
+    private List<CategoryDBO> list;
 
-    public CategoriesAdapter(List<CategoryDTO> list, MainPresenter mainPresenter,
+    public CategoriesAdapter(List<CategoryDBO> list, MainPresenter mainPresenter,
                              INavigationView navigationView) {
         this.list = list;
         this.mainPresenter = mainPresenter;
@@ -52,8 +51,8 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
 
         holder.tvTitle.setOnClickListener(v -> {
             int catID = list.get(position).getId();
-            mainPresenter.getQuizByCategory(catID);
-            navigationView.onItemClick();
+//            mainPresenter.getQuizByCategory(catID);
+//            navigationView.onItemClick();
         });
     }
 
@@ -76,8 +75,8 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
     /**
      * подгружаем список в адаптер
      */
-    public void addCategoriesToAdapter(List<CategoryDTO> categoryDTOList) {
-        list = categoryDTOList;
+    public void addCategoriesToAdapter(List<CategoryDBO> categoryDBOList) {
+        list = categoryDBOList;
         notifyDataSetChanged();
     }
 }

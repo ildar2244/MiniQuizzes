@@ -1,14 +1,14 @@
-package ru.axdar.miniquizzes.model.api;
+package ru.axdar.miniquizzes.data.api;
 
 import java.util.List;
 
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import retrofit2.http.GET;
-import ru.axdar.miniquizzes.model.Config;
-import ru.axdar.miniquizzes.model.dto.CategoryDTO;
-import ru.axdar.miniquizzes.model.dto.ModelDTO;
-import ru.axdar.miniquizzes.model.dto.QuizDTO;
+import ru.axdar.miniquizzes.data.Config;
+import ru.axdar.miniquizzes.data.dto.CategoryDTO;
+import ru.axdar.miniquizzes.data.dto.ModelDTO;
+import ru.axdar.miniquizzes.data.dto.QuizDTO;
 
 /**
  * Created by ildar2244 on 20.08.2018.
@@ -26,6 +26,12 @@ public interface IApiClient {
      */
     @GET(Config.PATH_CATEGORIES)
     Observable<List<CategoryDTO>> getCategories();
+
+    /**
+     * гет-запрос данных из подкаталога Категорий
+     */
+    @GET(Config.PATH_CATEGORIES)
+    Flowable<List<CategoryDTO>> getCategoriesSecond();
 
     /**
      * гет-запрос данных из подкаталога Викторины

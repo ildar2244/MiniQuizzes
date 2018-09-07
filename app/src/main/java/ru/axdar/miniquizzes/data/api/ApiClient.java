@@ -1,13 +1,12 @@
-package ru.axdar.miniquizzes.model.api;
+package ru.axdar.miniquizzes.data.api;
 
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import ru.axdar.miniquizzes.BuildConfig;
-import ru.axdar.miniquizzes.model.Config;
+import ru.axdar.miniquizzes.data.Config;
 
 /**
  * Created by ildar2244 on 20.08.2018.
